@@ -89,24 +89,52 @@
         how to interpret the values of your chosen correlation test. You do
         not need to calculate power.
     }
+
 	R input:
     \begin{verbatim}
 		new_data <- aggregate(Response ~ PID + Condition,
-			      data = subset(Responses, Measure == "Body Ownership"),
-			      FUN = median)
+            data = subset(Responses,
+                Measure == "Body Ownership"),
+            FUN = median)
 
-	combined_data <- merge(new_data, Demographics[, c("PID", "VR Experience")], by = "PID")
-	matched_data <- subset(combined_data, Condition == "Matched Hand")
-	mismatched_data <- subset(combined_data, Condition == "Mismatched Hand")
-	alien_data <- subset(combined_data, Condition == "Alien Hand")
+	combined_data <- merge(new_data,
+        Demographics[, c("PID", "VR Experience")],
+            by = "PID")
+	matched_data <- subset(combined_data,
+        Condition == "Matched Hand")
+	mismatched_data <- subset(combined_data,
+        Condition == "Mismatched Hand")
+	alien_data <- subset(combined_data,
+        Condition == "Alien Hand")
 
-	vr_exp_matched <- as.numeric(factor(matched_data$`VR Experience`, levels = c("5-9 hours", "10-49 hours", "50-99 hours", "100+ hours")))
-	vr_exp_mismatched <- as.numeric(factor(mismatched_data$`VR Experience`, levels = c("5-9 hours", "10-49 hours", "50-99 hours", "100+ hours")))
-	vr_exp_alien <- as.numeric(factor(alien_data$`VR Experience`, levels = c("5-9 hours", "10-49 hours", "50-99 hours", "100+ hours")))
+	vr_exp_matched <- as.numeric(
+        factor(matched_data$`VR Experience`,
+            levels = c(
+                "5-9 hours",
+                "10-49 hours",
+                "50-99 hours",
+                "100+ hours")))
+	vr_exp_mismatched <- as.numeric(
+        factor(mismatched_data$`VR Experience`,
+            levels = c(
+                "5-9 hours",
+                "10-49 hours",
+                "50-99 hours",
+                "100+ hours")))
+	vr_exp_alien <- as.numeric(
+        factor(alien_data$`VR Experience`,
+            levels = c(
+                "5-9 hours",
+                "10-49 hours",
+                "50-99 hours",
+                "100+ hours")))
 
-	spearman_match <- cor(matched_data$`Response`, vr_exp ,method = "spearman")
-	spearman_mismatch <- cor(mismatched_data$`Response`, vr_exp ,method = "spearman")
-	spearman_alien <- cor(alien_data$`Response`, vr_exp ,method = "spearman")
+	spearman_match <- cor(matched_data$`Response`,
+        vr_exp, method = "spearman")
+	spearman_mismatch <- cor(mismatched_data$`Response`,
+        vr_exp, method = "spearman")
+	spearman_alien <- cor(alien_data$`Response`,
+        vr_exp, method = "spearman")
 
 	cat("match: ", spearman_match, "\n")
 	cat("mismatched: ", spearman_mismatch, "\n")
@@ -120,6 +148,7 @@
 	mismatched:  0.1019782 
 	alien:  -0.1820486
     \end{verbatim}
-spearman test (rho values) are between 0.2 and -0.2 so no correlation.
+    
+    Spearman test ($\rho$ values) are between $\pm 0.2$ so no correlation.
 }
 \end{itemize}
