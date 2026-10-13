@@ -45,16 +45,21 @@
 
 The R input:
 \begin{verbatim}
-new_data <- aggregate(Response ~ PID + Condition,
-                      data = subset(Responses, Measure == "Body Ownership"),
-                      FUN = median)
+new_data <- aggregate(
+    Response ~ PID + Condition,
+    data = subset(Responses, Measure == "Body Ownership"),
+    FUN = median)
 
-f_val <- friedman.test(Response ~ Condition | PID, data = new_data)
+f_val <- friedman.test(
+    Response ~ Condition | PID, data = new_data)
 print(f_val)
 
-data_a <- new_data$Response[new_data$Condition == "Alien Hand"]
-data_b <- new_data$Response[new_data$Condition == "Matched Hand"]
-data_c <- new_data$Response[new_data$Condition == "Mismatched Hand"]
+data_a <- new_data$Response
+    [new_data$Condition == "Alien Hand"]
+data_b <- new_data$Response
+    [new_data$Condition == "Matched Hand"]
+data_c <- new_data$Response
+    [new_data$Condition == "Mismatched Hand"]
 
 test_ab <- wilcox.test(data_a, data_b, paired = TRUE)
 test_ac <- wilcox.test(data_a, data_c, paired = TRUE)
