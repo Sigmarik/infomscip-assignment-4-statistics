@@ -2,22 +2,34 @@ new_data <- aggregate(Response ~ PID + Condition,
                       data = subset(Responses, Measure == "Body Ownership"),
                       FUN = median)
 
-f_val <- friedman.test(Response ~ Condition | PID, data = new_data)
-print(f_val)
 
 
-data_a <- new_data$Response[new_data$Condition == "Alien Hand"]
-data_b <- new_data$Response[new_data$Condition == "Matched Hand"]
-data_c <- new_data$Response[new_data$Condition == "Mismatched Hand"]
 
-test_ab <- wilcox.test(data_a, data_b, paired = TRUE)
-test_ac <- wilcox.test(data_a, data_c, paired = TRUE)
-test_bc <- wilcox.test(data_b, data_c, paired = TRUE)
-p_ab <- test_ab$p.value
-p_ac <- test_ac$p.value
-p_bc <- test_bc$p.value
-cat("Wilcox tests:\n")
-cat("Alien + Matched p: ", p_ab, "and V: ", test_ab$statistic, "\n")
-cat("Alien + Mismatched p: ", p_ac, "and V: ", test_ac$statistic, "\n")
-cat("Mismatched + Matched p: ", p_bc, "and V: ", test_bc$statistic, "\n")
+library(ggplot2)
+combined_data <- merge(new_data, Demographics[, c("PID", "VR Experience")], by = "PID")
+#print(unique(combined_data$Condition))
+single_condition_data <- subset(combined_data, Condition == "Matched Hand")
 
+single_condition_data$`VR Experience` <- factor(
+  single_condition_data$`VR Experience`,
+  levels = c("5-9 hours", "10-49 hours", "50-99 hours", "100+ hours")
+)
+
+counts_table <- table(single_condition_data$`VR Experience`, single_condition_data$Response)
+counts_df <- as.data.frame(counts_table)
+colnames(counts_df) <- c("VRExperience", "Response", "Frequency")
+
+p <- ggplot(counts_df, aes(x = VRExperience, y = Response, fill = Frequency)) +
+  geom_tile(color = "white", linewidth = 0.5) + # Creates clean grid lines
+  geom_text(aes(label = Frequency), color = "black", size = 4) + # Overlays exact counts
+  scale_fill_gradient(low = "#e0f3db", high = "#43a2ca") + # Light green/blue to deep blue gradient
+  labs(
+    title = "Correlation Heatmap: VR Experience vs Body Ownership",
+    subtitle = "Condition: Alien Hand (Frequencies per cell)",
+    x = "VR Experience Category",
+    y = "Body Ownership",
+    fill = "Count"
+  ) +
+  theme_minimal()
+
+print(p)
