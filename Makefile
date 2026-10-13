@@ -28,7 +28,7 @@ all:  ${PDF}
 	pdflatex $<
 	- bibtex $*
 	pdflatex $<
-	while ( grep -q '^LaTeX Warning: Label(s) may have changed' $*.log) \
+	while ( grep -qE '^(LaTeX Warning: Label\(s\) may have changed|Package natbib Warning: (Citation\(s\) may have changed))' $*.log) \
 	do pdflatex $<; done
 
 INFOMSCIP-%.pdf: main.pdf
