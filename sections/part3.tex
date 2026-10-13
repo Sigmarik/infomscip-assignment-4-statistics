@@ -1,0 +1,68 @@
+\section{Differences between participants}
+
+\begin{itemize}
+\item {
+    \textbf{
+        The authors used multiple Fisher's exact tests to examine whether
+        there was an effect of sex on any of the dependent variables (independently from each other). A Fisher's exact test is typically
+        used to examine association between two categorical variables,
+        when both variables only have two options. This is not the case,
+        since the responses are on $7$-point scales, and have natural order.
+        Give an example of what way the authors could have created categorical data from the response data. There are multiple valid
+        answers here. Pick the one you think the reviewers of the article
+        would complain the least about, and explain why it is valid for the
+        particular Body Ownership question.
+    }
+
+    They could have used a binary variable with did/did not experience body ownership.
+    Values from $-3$ to $0$ (inclusive) would be "did not experience body ownership" whereas $1$ to $3$ (inclusive) would be "did experience body ownership". This works because negative values disagree with the question of feeling that their virtual hands were their own, and answering $0$ is neutral. These values all represent not feeling body ownership, whereas positive values do.
+}
+
+\item {
+    \textbf{
+        Again taking the body ownership data as an example, describe a
+        statistical test that you think is better suited to examine the effect
+        of sex (just Male \& Female), regardless of hand representation.
+        Use the links provided in the lecture slides to choose a test, and
+        if you are not sure, google extra information about possible tests
+        (as this is probably how you will approach this problem in the
+        future). State the null and alternative hypotheses, and for the
+        latter, explicitly state whether it is one-sided or two-sided. List the
+        variables and corresponding levels, and all parameters you need
+        in your test. Be as specific as possible. You do not need to actually
+        perform this test in R.
+    }
+}
+
+\item {
+    \textbf{
+        Using the data set you created in Part II as a starting point (that is,
+        where each condition only has a single response value rather than
+        three repetitions), visualize the posited correlation between amount
+        of VR experience and body ownership responses for each hand
+        representation, i.e. choose a visualization, and create one plot for
+        each condition. By posited I mean that you do not actually have to
+        calculate the correlation or draw a correlation function (see next
+        question), just find a way to visualize the data in such way that
+        would indicate to readers they should admit or rule out a possible
+        correlation. Choose what you think is the best visualization based
+        on the type of data we are using, the variables we are investigating, and the problem we are trying to investigate. You will have
+        to make decisions here, since there is no perfect answer. Make
+        sure your figures contain all the information a reader of a paper
+        would need to understand it. Feel free to experiment with plotting
+        functions from other R packages than the default packages.
+    }
+}
+
+\item {
+    \textbf{
+        Test post-hoc whether there is a positive correlation between VR
+        experience and body ownership responses for each hand representation separately, meaning you will have to do multiple comparisons. Choose the correct correlation test using the links in the
+        slides and by googling if necessary. Report all relevant results and
+        draw a conclusion from your results. If you do not understand
+        how to interpret the results in order to give a conclusion, google
+        how to interpret the values of your chosen correlation test. You do
+        not need to calculate power.
+    }
+}
+\end{itemize}

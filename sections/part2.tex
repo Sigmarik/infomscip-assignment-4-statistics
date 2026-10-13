@@ -1,0 +1,94 @@
+\section{Dealing with repetitions}
+
+\newcommand{\lt}{\ensuremath <}
+\begin{itemize}
+\item {
+    \textbf{
+        What is a possible drawback to using a single combined value
+        of the repetition values as opposed to performing a different test
+        that retains the repetition values, and how could this affect the
+        conclusions of the experiment? You can use citations to back up
+        your response.
+    }
+
+    Combining the repetition values into a single value may affect the conclusions of the experiment, due to a loss of effects that happened over time like learning or getting used to a condition. These effects might differ across conditions, potentially leading to bias in the data before running the statistical tests. For example, if the participants' tendency to adapt to a particular condition over time is comparatively higher than in other conditions, we may end up with higher values for Body Ownership. Additionally, the intervals in likert scales are subjective and inconsistent, making it problematic to combine our results into a single value.
+}
+
+\item {
+    \textbf{
+        Looking at the different measures of central tendency discussed in
+        the slides, name one measure that could be used for this data set
+        to compute a combined response value, and explain why it could
+        be a valid measure to use? There are multiple valid answers here;
+        pick the one you think the reviewers of the article would complain
+        the least about. Also, explain which measure would be invalid and
+        explain why it would be invalid.
+    }
+
+    The median value could be used as a measure, since our data is ordinal. Additionally, it is a good fit since intervals in the Likert scale are not equal, and it is less affected by extreme responses. The mode would be an invalid measure because it is possible to have three different responses, in which case the mode would have to be a random response.
+}
+
+\item {
+    \textbf{
+        Use the friedman.test from the stats package to perform a
+        Friedman test on this Body Ownership data, to see if it matches
+        the authors' results. First, create a new smaller dataset that contains values for 'PID', 'Condition' and 'Response'. The latter column should contain the newly computed combined body ownership values according to the measure of central tendency you
+        chose in the previous question. If the effect is significant, then also
+        perform pairwise comparisons to see which conditions actually
+        differ significantly from each other, using the wilcox.test for
+        Wilcoxon signed rank tests from the stats package. Remember
+        that since you are performing multiple comparisons, you must
+        perform some type of correction to account for the increased likelihood of a Type I error. Do this by hand after computing the results
+        of the Wilcoxon signed rank test using a Bonferroni correction.
+        You do not need to calculate power.
+    }
+}
+
+The R input:
+\begin{verbatim}
+new_data <- aggregate(Response ~ PID + Condition,
+                      data = subset(Responses, Measure == "Body Ownership"),
+                      FUN = median)
+
+f_val <- friedman.test(Response ~ Condition | PID, data = new_data)
+print(f_val)
+
+data_a <- new_data$Response[new_data$Condition == "Alien Hand"]
+data_b <- new_data$Response[new_data$Condition == "Matched Hand"]
+data_c <- new_data$Response[new_data$Condition == "Mismatched Hand"]
+
+test_ab <- wilcox.test(data_a, data_b, paired = TRUE)
+test_ac <- wilcox.test(data_a, data_c, paired = TRUE)
+test_bc <- wilcox.test(data_b, data_c, paired = TRUE)
+p_ab <- test_ab$p.value
+p_ac <- test_ac$p.value
+p_bc <- test_bc$p.value
+cat("Wilcox tests:\n")
+cat("Alien + Matched p: ", p_ab, "\n")
+cat("Alien + Mismatched p: ", p_ac, "\n")
+cat("Mismatched + Matched p: ", p_bc, "\n")
+
+\end{verbatim}
+The R output:
+
+\begin{verbatim}
+Friedman rank sum test
+
+data:  Response and Condition and PID
+Friedman chi-squared = 109.77, df = 2, p-value < 2.2e-16
+
+Wilcox tests:
+Alien + Matched p:  2.855192e-16 
+Alien + Mismatched p:  1.496427e-09 
+Mismatched + Matched p:  1.276528e-08
+\end{verbatim}
+
+Error correction:
+\begin{equation}
+	\alpha_{\text{Corrected}} = \frac{0{,}05}{3} \approx 0{,}0167 
+\end{equation}
+
+A Friedman test revealed a statistically significant difference in responses across the three experimental conditions, $\chi$²(2) = 109.77, p \lt .001.
+
+Post-hoc pairwise comparisons were conducted using Wilcoxon signed-rank tests with a Bonferroni-adjusted alpha level of .017 to control for Type I error. The post-hoc tests indicated that all conditions were significantly different from one another. Specifically, highly significant differences were found between the all 3 conditions, with all pairwise comparisons yielding p \lt .001.
+\end{itemize}
