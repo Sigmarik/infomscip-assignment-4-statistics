@@ -47,7 +47,8 @@ The R input:
 \begin{verbatim}
 new_data <- aggregate(
     Response ~ PID + Condition,
-    data = subset(Responses, Measure == "Body Ownership"),
+    data = subset(Responses,
+        Measure == "Body Ownership"),
     FUN = median)
 
 f_val <- friedman.test(
@@ -79,7 +80,9 @@ The R output:
 Friedman rank sum test
 
 data:  Response and Condition and PID
-Friedman chi-squared = 109.77, df = 2, p-value < 2.2e-16
+Friedman chi-squared = 109.77,
+         df = 2,
+         p-value < 2.2e-16
 
 Wilcox tests:
 Alien + Matched p:  2.855192e-16 

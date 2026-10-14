@@ -96,23 +96,59 @@
     \begin{verbatim}
 		
 	new_data <- aggregate(Response ~ PID + Condition,
-			      data = subset(Responses, Measure == "Body Ownership"),
-			      FUN = median)
+        data = subset(Responses,
+            Measure == "Body Ownership"),
+        FUN = median)
 
-	combined_data <- merge(new_data, Demographics[, c("PID", "VR Experience")], by = "PID")
-	matched_data <- subset(combined_data, Condition == "Matched Hand")
-	mismatched_data <- subset(combined_data, Condition == "Mismatched Hand")
-	alien_data <- subset(combined_data, Condition == "Alien Hand")
+	combined_data <- merge(new_data,
+        Demographics[, c("PID", "VR Experience")],
+            by = "PID")
+	matched_data <- subset(combined_data,
+        Condition == "Matched Hand")
+	mismatched_data <- subset(combined_data,
+        Condition == "Mismatched Hand")
+	alien_data <- subset(combined_data,
+        Condition == "Alien Hand")
 
 
-	vr_exp_matched <- as.numeric(factor(matched_data$`VR Experience`, levels = c("5-9 hours", "10-49 hours", "50-99 hours", "100+ hours")))
-	vr_exp_mismatched <- as.numeric(factor(mismatched_data$`VR Experience`, levels = c("5-9 hours", "10-49 hours", "50-99 hours", "100+ hours")))
-	vr_exp_alien <- as.numeric(factor(alien_data$`VR Experience`, levels = c("5-9 hours", "10-49 hours", "50-99 hours", "100+ hours")))
+	vr_exp_matched <- as.numeric(
+        factor(matched_data$`VR Experience`,
+            levels = c(
+                "5-9 hours",
+                "10-49 hours",
+                "50-99 hours",
+                "100+ hours")))
+	vr_exp_mismatched <- as.numeric(
+        factor(mismatched_data$`VR Experience`,
+            levels = c(
+                "5-9 hours",
+                "10-49 hours",
+                "50-99 hours",
+                "100+ hours")))
+	vr_exp_alien <- as.numeric(
+        factor(alien_data$`VR Experience`,
+            levels = c(
+                "5-9 hours",
+                "10-49 hours",
+                "50-99 hours",
+                "100+ hours")))
 
 
-	spearman_match <- cor.test(matched_data$`Response`, vr_exp_matched ,method = "spearman", exact = FALSE)
-	spearman_mismatch <- cor.test(mismatched_data$`Response`, vr_exp_mismatched ,method = "spearman", exact = FALSE)
-	spearman_alien <- cor.test(alien_data$`Response`, vr_exp_alien ,method = "spearman", exact = FALSE)
+	spearman_match <- cor.test(
+        matched_data$`Response`,
+        vr_exp_matched,
+        method = "spearman",
+        exact = FALSE)
+	spearman_mismatch <- cor.test(
+        mismatched_data$`Response`,
+        vr_exp_mismatched,
+        method = "spearman",
+        exact = FALSE)
+	spearman_alien <- cor.test(
+        alien_data$`Response`,
+        vr_exp_alien ,
+        method = "spearman",
+        exact = FALSE)
 
 	print(spearman_match)
 	print(spearman_mismatch)
@@ -134,22 +170,24 @@
 
 	Spearman's rank correlation rho
 
-data:  mismatched_data$Response and vr_exp_mismatched
-S = 210259, p-value = 0.2847
-alternative hypothesis: true rho is not equal to 0
-sample estimates:
-      rho 
-0.1019782 
+    data:  mismatched_data$Response and
+        vr_exp_mismatched
+    S = 210259, p-value = 0.2847
+    alternative hypothesis: true rho is not equal to 0
+    sample estimates:
+        rho 
+    0.1019782 
 
 
-	Spearman's rank correlation rho
+    Spearman's rank correlation rho
 
-data:  alien_data$Response and vr_exp_alien
-S = 276760, p-value = 0.05472
-alternative hypothesis: true rho is not equal to 0
-sample estimates:
-       rho 
--0.1820486 
+    data:  alien_data$Response and
+        vr_exp_alien
+    S = 276760, p-value = 0.05472
+    alternative hypothesis: true rho is not equal to 0
+    sample estimates:
+        rho 
+    -0.1820486 
     \end{verbatim}
     
     For the Body Ownership to VR Experience correlation in the matched hand condition, the analysis revealed a weak positive correlation that was not statistically significant, $r_s = .13$, $p = .162$.
