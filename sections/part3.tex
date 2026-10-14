@@ -114,6 +114,9 @@
 	spearman_mismatch <- cor.test(mismatched_data$`Response`, vr_exp_mismatched ,method = "spearman", exact = FALSE)
 	spearman_alien <- cor.test(alien_data$`Response`, vr_exp_alien ,method = "spearman", exact = FALSE)
 
+	print(spearman_match)
+	print(spearman_mismatch)
+	print(spearman_alien)
 
 	    \end{verbatim}
 
