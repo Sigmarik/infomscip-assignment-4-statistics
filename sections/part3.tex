@@ -60,6 +60,8 @@
         functions from other R packages than the default packages.
     }
 
+    To create the following graphs we used the ggplot2 package in R.
+
     \begin{figure}
         \includegraphics[width=9cm]{alien.png}
         \caption{Body Ownership vs. VR Experience in the alien hand condition.}
@@ -92,63 +94,64 @@
 
 	R input:
     \begin{verbatim}
-		new_data <- aggregate(Response ~ PID + Condition,
-            data = subset(Responses,
-                Measure == "Body Ownership"),
-            FUN = median)
+		
+	new_data <- aggregate(Response ~ PID + Condition,
+			      data = subset(Responses, Measure == "Body Ownership"),
+			      FUN = median)
 
-	combined_data <- merge(new_data,
-        Demographics[, c("PID", "VR Experience")],
-            by = "PID")
-	matched_data <- subset(combined_data,
-        Condition == "Matched Hand")
-	mismatched_data <- subset(combined_data,
-        Condition == "Mismatched Hand")
-	alien_data <- subset(combined_data,
-        Condition == "Alien Hand")
+	combined_data <- merge(new_data, Demographics[, c("PID", "VR Experience")], by = "PID")
+	matched_data <- subset(combined_data, Condition == "Matched Hand")
+	mismatched_data <- subset(combined_data, Condition == "Mismatched Hand")
+	alien_data <- subset(combined_data, Condition == "Alien Hand")
 
-	vr_exp_matched <- as.numeric(
-        factor(matched_data$`VR Experience`,
-            levels = c(
-                "5-9 hours",
-                "10-49 hours",
-                "50-99 hours",
-                "100+ hours")))
-	vr_exp_mismatched <- as.numeric(
-        factor(mismatched_data$`VR Experience`,
-            levels = c(
-                "5-9 hours",
-                "10-49 hours",
-                "50-99 hours",
-                "100+ hours")))
-	vr_exp_alien <- as.numeric(
-        factor(alien_data$`VR Experience`,
-            levels = c(
-                "5-9 hours",
-                "10-49 hours",
-                "50-99 hours",
-                "100+ hours")))
 
-	spearman_match <- cor(matched_data$`Response`,
-        vr_exp, method = "spearman")
-	spearman_mismatch <- cor(mismatched_data$`Response`,
-        vr_exp, method = "spearman")
-	spearman_alien <- cor(alien_data$`Response`,
-        vr_exp, method = "spearman")
+	vr_exp_matched <- as.numeric(factor(matched_data$`VR Experience`, levels = c("5-9 hours", "10-49 hours", "50-99 hours", "100+ hours")))
+	vr_exp_mismatched <- as.numeric(factor(mismatched_data$`VR Experience`, levels = c("5-9 hours", "10-49 hours", "50-99 hours", "100+ hours")))
+	vr_exp_alien <- as.numeric(factor(alien_data$`VR Experience`, levels = c("5-9 hours", "10-49 hours", "50-99 hours", "100+ hours")))
 
-	cat("match: ", spearman_match, "\n")
-	cat("mismatched: ", spearman_mismatch, "\n")
-	cat("alien: ", spearman_alien, "\n")
 
-    \end{verbatim}
+	spearman_match <- cor.test(matched_data$`Response`, vr_exp_matched ,method = "spearman", exact = FALSE)
+	spearman_mismatch <- cor.test(mismatched_data$`Response`, vr_exp_mismatched ,method = "spearman", exact = FALSE)
+	spearman_alien <- cor.test(alien_data$`Response`, vr_exp_alien ,method = "spearman", exact = FALSE)
 
-    R output:
-    \begin{verbatim}
-	match:  0.1329072 
-	mismatched:  0.1019782 
-	alien:  -0.1820486
+
+	    \end{verbatim}
+
+	    R output:
+	    \begin{verbatim}
+		Spearman's rank correlation rho
+
+	data:  matched_data$Response and vr_exp_matched
+	S = 203018, p-value = 0.1624
+	alternative hypothesis: true rho is not equal to 0
+	sample estimates:
+	      rho 
+	0.1329072 
+
+
+	Spearman's rank correlation rho
+
+data:  mismatched_data$Response and vr_exp_mismatched
+S = 210259, p-value = 0.2847
+alternative hypothesis: true rho is not equal to 0
+sample estimates:
+      rho 
+0.1019782 
+
+
+	Spearman's rank correlation rho
+
+data:  alien_data$Response and vr_exp_alien
+S = 276760, p-value = 0.05472
+alternative hypothesis: true rho is not equal to 0
+sample estimates:
+       rho 
+-0.1820486 
     \end{verbatim}
     
-    Spearman test ($\rho$ values) are between $\pm 0.2$ so no correlation.
-}
+    For the Body Ownership to VR Experience correlation in the matched hand condition, the analysis revealed a weak positive correlation that was not statistically significant, $r_s = .13$, $p = .162$.
+
+Similarly, for the mismatched hand condition, a weak positive correlation was observed, which also failed to reach statistical significance, $r_s = .10$, $p = .285$.
+
+In contrast, the alien hand condition demonstrated a weak negative correlation, $r_s = -.18$, $p = .055$. Although this relationship is not statistically significant at the conventional $\alpha = .05$ threshold, it can be considered marginally significant as it closely approaches the cutoff value.}
 \end{itemize}
